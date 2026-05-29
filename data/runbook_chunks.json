@@ -1,0 +1,66 @@
+[
+  {
+    "source_id": "REL-101",
+    "title": "Checkout API Error Spike Runbook",
+    "category": "Reliability",
+    "section": "Triage",
+    "chunk_id": "chunk-rel-101-a",
+    "text": "If checkout API 5xx errors spike immediately after a release, compare the spike against deployment timestamps, checkout latency, order completion rate, and recent feature flag changes. Confirm whether the issue affects all customers or a specific region before changing severity."
+  },
+  {
+    "source_id": "REL-101",
+    "title": "Checkout API Error Spike Runbook",
+    "category": "Reliability",
+    "section": "Mitigation",
+    "chunk_id": "chunk-rel-101-b",
+    "text": "For a confirmed checkout API error spike after a release, pause additional deployments, notify the incident channel, prepare rollback to the previous stable version, and watch 5xx rate, checkout latency, and order completion rate after mitigation."
+  },
+  {
+    "source_id": "REL-102",
+    "title": "Rollback Coordination Runbook",
+    "category": "Reliability",
+    "section": "Rollback Steps",
+    "chunk_id": "chunk-rel-102-a",
+    "text": "Before rollback, assign an incident lead, confirm the last known stable version, post the rollback plan in the incident channel, and verify database migrations are backward compatible. After rollback, monitor user-facing errors and record the final timeline."
+  },
+  {
+    "source_id": "REL-120",
+    "title": "Status Page Update Guide",
+    "category": "Reliability",
+    "section": "Customer Communication",
+    "chunk_id": "chunk-rel-120-a",
+    "text": "Publish a status page update when an incident affects customer-facing availability, payment completion, data exports, or login. The first update should state the affected service, current impact, and next update time without speculating on root cause."
+  },
+  {
+    "source_id": "SEC-210",
+    "title": "API Key Exposure Procedure",
+    "category": "Security",
+    "section": "Containment",
+    "chunk_id": "chunk-sec-210-a",
+    "text": "If an API key is exposed, revoke the key, rotate affected credentials, review access logs for unusual usage, notify the security channel, and open a follow-up ticket for prevention. Do not paste exposed secrets into public tickets or chat threads."
+  },
+  {
+    "source_id": "API-330",
+    "title": "Rate Limit Support Guide",
+    "category": "API Support",
+    "section": "Customer Guidance",
+    "chunk_id": "chunk-api-330-a",
+    "text": "When customers hit rate limits, confirm the endpoint, time window, status code, and request volume. Recommend exponential backoff, request batching, and reviewing whether the integration is retrying failed requests too aggressively."
+  },
+  {
+    "source_id": "DATA-410",
+    "title": "Delayed Export Runbook",
+    "category": "Data Operations",
+    "section": "Investigation",
+    "chunk_id": "chunk-data-410-a",
+    "text": "For delayed data exports, check the export queue depth, worker error logs, customer account size, and recent schema changes. If the delay is widespread, update the incident channel and consider a customer-facing status page update."
+  },
+  {
+    "source_id": "OBS-144",
+    "title": "Incident Metrics Checklist",
+    "category": "Observability",
+    "section": "Signals",
+    "chunk_id": "chunk-obs-144-a",
+    "text": "During incident mitigation, monitor error rate, latency, saturation, queue depth, and customer success metrics. Compare current values against the baseline from the previous 24 hours and note any metric that does not improve after mitigation."
+  }
+]

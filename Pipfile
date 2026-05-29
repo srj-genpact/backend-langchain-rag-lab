@@ -1,0 +1,19 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+flask = "*"
+pytest = "*"
+langchain = "*"
+langchain-core = "*"
+langchain-community = "*"
+langchain-ollama = "*"
+langchain-chroma = "*"
+chromadb = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.10"
