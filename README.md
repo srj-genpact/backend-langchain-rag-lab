@@ -12,7 +12,7 @@ You are a junior backend developer on an internal platform team. The reliability
 
 Engineers often ask questions like:
 
-"What should I do if checkout API errors spike right after a release?"
+> "What should I do if checkout API errors spike right after a release?"
 
 A general model might give generic advice, but your company needs answers grounded in approved runbooks. Your task is to complete a Flask endpoint that uses LangChain to organize this workflow:
 
@@ -32,6 +32,7 @@ You will complete a `POST /api/ask` endpoint.
 
 A successful response should use this general shape:
 
+```json
     {
       "answer": "Pause additional deployments, prepare a rollback, notify the incident channel, and monitor checkout metrics after mitigation.",
       "sources": [
@@ -61,6 +62,7 @@ A successful response should use this general shape:
         "score_type": "Chroma distance; lower usually means closer in this lesson setup"
       }
     }
+```
 
 ## Tools and Resources
 
@@ -73,8 +75,8 @@ You will use:
 - LangChain
 - Chroma
 - Ollama
-- A local embedding model such as `embeddinggemma`
-- A local generation model such as `llama3.2`
+- A local embedding model: `embeddinggemma`
+- A local generation model: `llama3.2`
 
 The automated tests use fake vector stores and fake chains where possible. The tests do not require a live Ollama model or a seeded Chroma database.
 
@@ -82,12 +84,16 @@ The automated tests use fake vector stores and fake chains where possible. The t
 
 Install dependencies:
 
-    pipenv install
-    pipenv shell
+```bash
+pipenv install
+pipenv shell
+```
 
 Run the tests:
 
-    pytest
+```bash
+pytest
+```
 
 At the start, many tests will fail. Use the failures as your checklist.
 
@@ -97,56 +103,68 @@ The autograded tests do not require a running Ollama instance, but you can try t
 
 Install or start Ollama, then pull models:
 
-    ollama pull embeddinggemma
-    ollama pull llama3.2
-    ollama run llama3.2 "Hello"
+```bash
+ollama pull embeddinggemma
+ollama pull llama3.2
+ollama run llama3.2 "Hello"
+```
 
 Seed the vector store:
 
-    python seed_chroma.py
+```bash
+python seed_chroma.py
+```
 
 Run Flask:
 
-    flask --app app run --debug
+```bash
+flask --app app run --debug
+```
 
 Test the endpoint:
 
-    curl -i -X POST http://127.0.0.1:5000/api/ask -H "Content-Type: application/json" -d "{\"question\": \"What should I do if checkout API errors spike right after a release?\"}"
+```bash
+curl -i -X POST http://127.0.0.1:5000/api/ask -H "Content-Type: application/json" -d "{\"question\": \"What should I do if checkout API errors spike right after a release?\"}"
+```
 
 You can also test the service without Flask:
 
-    python try_langchain_rag.py "When should we publish a status page update?"
+```bash
+python try_langchain_rag.py "When should we publish a status page update?"
+```
 
 ## Project Structure
 
-    backend-langchain-rag-lab/
-    ├── app.py
-    ├── seed_chroma.py
-    ├── try_langchain_rag.py
-    ├── planning_notes.md
-    ├── Pipfile
-    ├── requirements.txt
-    ├── pytest.ini
-    ├── data/
-    │   └── runbook_chunks.json
-    ├── lib/
-    │   ├── __init__.py
-    │   ├── config.py
-    │   ├── documents.py
-    │   ├── langchain_rag_service.py
-    │   ├── prompt_templates.py
-    │   ├── response_formatter.py
-    │   ├── validation.py
-    │   └── vector_store.py
-    └── tests/
-        ├── fakes.py
-        ├── test_app.py
-        ├── test_langchain_rag_service.py
-        ├── test_prompt_templates.py
-        ├── test_response_formatter.py
-        ├── test_static_structure.py
-        ├── test_validation.py
-        └── test_vector_store.py
+```text
+backend-langchain-rag-lab/
+├── app.py
+├── seed_chroma.py
+├── try_langchain_rag.py
+├── planning_notes.md
+├── Pipfile
+├── requirements.txt
+├── pytest.ini
+├── data/
+│   └── runbook_chunks.json
+├── lib/
+│   ├── __init__.py
+│   ├── config.py
+│   ├── documents.py
+│   ├── langchain_rag_service.py
+│   ├── prompt_templates.py
+│   ├── response_formatter.py
+│   ├── validation.py
+│   └── vector_store.py
+└── tests/
+    ├── fakes.py
+    ├── test_app.py
+    ├── test_langchain_rag_service.py
+    ├── test_prompt_templates.py
+    ├── test_response_formatter.py
+    ├── test_static_structure.py
+    ├── test_validation.py
+    └── test_vector_store.py
+```
 
 ## Instructions
 
@@ -242,7 +260,9 @@ In `lib/langchain_rag_service.py`, implement:
 
 The chain should use this sequence:
 
-    prompt_template | llm | StrOutputParser()
+```python
+prompt_template | llm | StrOutputParser()
+```
 
 `answer_question()` should:
 
@@ -275,7 +295,9 @@ The route should not build prompts, retrieve documents, or call the model direct
 
 Run:
 
-    pytest
+```bash
+pytest
+```
 
 Use the test failures as feedback. The tests check validation, response formatting, prompt variables, retrieval behavior, service flow, fallback behavior, error handling, and route behavior.
 
