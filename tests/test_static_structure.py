@@ -27,10 +27,37 @@ def test_flask_route_keeps_ai_workflow_out_of_route():
         assert term not in source
 
 
-def test_build_chain_uses_prompt_model_parser_sequence():
-    source = inspect.getsource(service.build_chain)
+def test_build_chain_returns_runnable_sequence(monkeypatch):
+    class FakePrompt:
+        def __or__(self, other):
+            return FakeRunnableSequence(["prompt", other])
 
-    assert "build_rag_prompt" in source
-    assert "build_chat_model" in source
-    assert "StrOutputParser" in source
-    assert "|" in source
+    class FakeModel:
+        pass
+
+    class FakeParser:
+        pass
+
+    class FakeRunnableSequence:
+        def __init__(self, parts):
+            self.parts = parts
+
+        def __or__(self, other):
+            return FakeRunnableSequence(self.parts + [other])
+
+    monkeypatch.setattr(service, "build_chat_model", lambda: FakeModel())
+
+    import lib.prompt_templates as prompt_templates
+
+    monkeypatch.setattr(prompt_templates, "build_rag_prompt", lambda: FakePrompt())
+
+    import langchain_core.output_parsers
+
+    monkeypatch.setattr(langchain_core.output_parsers, "StrOutputParser", FakeParser)
+
+    chain = service.build_chain()
+
+    assert isinstance(chain, FakeRunnableSequence)
+    assert chain.parts[0] == "prompt"
+    assert isinstance(chain.parts[1], FakeModel)
+    assert isinstance(chain.parts[2], FakeParser)
